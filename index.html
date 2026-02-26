@@ -1200,11 +1200,11 @@ const DIMENSIONS = [
     lowLabel: 'Egalitarian',
     highLabel: 'Hierarchical',
     spectrum: [
-      {marker: 'Far left', text: '\u2022 Call your CEO by first name\n\u2022 Push back on a bad idea in any meeting\n\u2022 Everyone\u2019s opinion counts equally'},
-      {marker: 'Leaning left', text: '\u2022 Expect open dialogue with your manager\n\u2022 Raise concerns, maybe privately\n\u2022 Flat team structures feel natural'},
-      {marker: 'Centre', text: '\u2022 Respect authority but expect to be heard\n\u2022 Titles matter somewhat\n\u2022 Competence trumps seniority'},
-      {marker: 'Leaning right', text: '\u2022 Value clear chains of command\n\u2022 Defer to senior people\u2019s decisions\n\u2022 Structure brings clarity'},
-      {marker: 'Far right', text: '\u2022 Never question a senior person publicly\n\u2022 Age and rank deserve automatic respect\n\u2022 Hierarchy gives life order and stability'}
+      {marker: 'Far left', text: '\u2022 Openly challenge your boss in front of everyone\n\u2022 The intern\u2019s idea is as valid as the director\u2019s\n\u2022 No one deserves authority just for their title'},
+      {marker: 'Leaning left', text: '\u2022 Flat teams, open-door managers\n\u2022 Speak up if you disagree'},
+      {marker: 'Centre', text: '\u2022 Respect authority but expect to be heard'},
+      {marker: 'Leaning right', text: '\u2022 Follow the chain of command\n\u2022 Seniority earns respect'},
+      {marker: 'Far right', text: '\u2022 Never contradict someone senior \u2014 ever\n\u2022 Stand when an elder enters the room\n\u2022 Questioning authority feels deeply wrong'}
     ],
     gapText: {
       higher: "You value hierarchy more than this culture does. You might find the informality surprising \u2014 people may seem disrespectful toward authority figures, and the lack of clear chain-of-command can feel disorganized.",
@@ -1231,11 +1231,11 @@ const DIMENSIONS = [
     lowLabel: 'Collectivist',
     highLabel: 'Individualist',
     spectrum: [
-      {marker: 'Far left', text: '\u2022 Move home to care for family without hesitation\n\u2022 Major life decisions are group decisions\n\u2022 Loyalty to your people is everything'},
-      {marker: 'Leaning left', text: '\u2022 Seriously weigh family\u2019s opinion on big moves\n\u2022 Feel responsible for extended family\n\u2022 Group harmony matters a lot'},
-      {marker: 'Centre', text: '\u2022 Value independence but stay close to family\n\u2022 Balance personal goals with group needs\n\u2022 Try to keep everyone happy'},
-      {marker: 'Leaning right', text: '\u2022 Make your own decisions, keep family informed\n\u2022 Uncomfortable sacrificing career for the group\n\u2022 Personal goals come first, mostly'},
-      {marker: 'Far right', text: '\u2022 Relocate for a dream job without permission\n\u2022 Your life, your choices\n\u2022 Self-reliance is a core value'}
+      {marker: 'Far left', text: '\u2022 Quit your dream job to care for family \u2014 no question\n\u2022 \u2018I\u2019 doesn\u2019t exist \u2014 only \u2018we\u2019\n\u2022 Shame on the family is shame on you'},
+      {marker: 'Leaning left', text: '\u2022 Family\u2019s opinion seriously shapes big decisions\n\u2022 Feel responsible for extended family'},
+      {marker: 'Centre', text: '\u2022 Balance personal goals with family expectations'},
+      {marker: 'Leaning right', text: '\u2022 Your career, your call\n\u2022 Keep family informed, not involved'},
+      {marker: 'Far right', text: '\u2022 Move across the world without asking anyone\n\u2022 Depend on no one \u2014 total self-reliance\n\u2022 Your life is yours alone'}
     ],
     gapText: {
       higher: "You're more individualistic than this culture. People here place great value on group harmony, family obligations, and loyalty. What you see as self-reliance may be seen as selfishness.",
@@ -1263,11 +1263,11 @@ const DIMENSIONS = [
     lowLabel: 'Caring',
     highLabel: 'Competitive',
     spectrum: [
-      {marker: 'Far left', text: '\u2022 Take a pay cut for work-life balance easily\n\u2022 Rather be a good parent than a top performer\n\u2022 Cooperation beats competition every time'},
-      {marker: 'Leaning left', text: '\u2022 Personal time and relationships over career status\n\u2022 Uncomfortable when people brag about achievements\n\u2022 Quality of life matters most'},
-      {marker: 'Centre', text: '\u2022 Want to succeed but not at any cost\n\u2022 Ambitious but know when to switch off\n\u2022 Balance between drive and wellbeing'},
-      {marker: 'Leaning right', text: '\u2022 Take pride in outperforming others\n\u2022 Admire people with impressive careers\n\u2022 A promotion gives you a real buzz'},
-      {marker: 'Far right', text: '\u2022 Check work email on vacation\n\u2022 Being the best is core to your identity\n\u2022 Always pick the higher-paying job'}
+      {marker: 'Far left', text: '\u2022 Success means being kind, not being rich\n\u2022 Competition makes you uncomfortable\n\u2022 Would happily earn less for more time with family'},
+      {marker: 'Leaning left', text: '\u2022 Free time and relationships over promotions\n\u2022 Bragging feels tasteless'},
+      {marker: 'Centre', text: '\u2022 Ambitious but not at any cost'},
+      {marker: 'Leaning right', text: '\u2022 Love the thrill of winning\n\u2022 Admire high achievers'},
+      {marker: 'Far right', text: '\u2022 Second place is first loser\n\u2022 Work defines who you are\n\u2022 Always choose more money \u2014 always'}
     ],
     gapText: {
       higher: "You're more competitive than this culture. People here prioritize work-life balance and cooperation over individual achievement. Boasting about success may be seen as tasteless.",
@@ -1295,11 +1295,11 @@ const DIMENSIONS = [
     lowLabel: 'Flexible',
     highLabel: 'Structured',
     spectrum: [
-      {marker: 'Far left', text: '\u2022 Quit your job to travel with no plan\n\u2022 Uncertainty is exciting, not stressful\n\u2022 Rules are made to be broken'},
-      {marker: 'Leaning left', text: '\u2022 Rough plan, happy to improvise\n\u2022 Don\u2019t stress when things change\n\u2022 Rather adapt than over-prepare'},
-      {marker: 'Centre', text: '\u2022 Like a plan but don\u2019t panic without one\n\u2022 Some structure, not rigid\n\u2022 A little uncertainty is fine'},
-      {marker: 'Leaning right', text: '\u2022 Research restaurants before choosing\n\u2022 Prefer clear instructions and deadlines\n\u2022 Unexpected changes feel uncomfortable'},
-      {marker: 'Far right', text: '\u2022 Plan holidays months in advance with itineraries\n\u2022 Need to know what\u2019s happening and when\n\u2022 Ambiguity and surprises genuinely stress you'}
+      {marker: 'Far left', text: '\u2022 Quit your job tomorrow and figure it out later\n\u2022 Rules? What rules?\n\u2022 Chaos is just another word for opportunity'},
+      {marker: 'Leaning left', text: '\u2022 Wing it with a rough idea\n\u2022 Change of plans? No problem'},
+      {marker: 'Centre', text: '\u2022 Like a plan but can adapt without stress'},
+      {marker: 'Leaning right', text: '\u2022 Research everything before deciding\n\u2022 Surprises are unwelcome'},
+      {marker: 'Far right', text: '\u2022 Every day planned hour by hour\n\u2022 The unknown fills you with dread\n\u2022 There\u2019s a right way to do everything \u2014 follow it'}
     ],
     gapText: {
       higher: "You prefer more structure than this culture provides. You may find the relaxed approach to rules and timelines unsettling. Plans may change frequently, and ambiguity is tolerated more readily.",
@@ -1328,11 +1328,11 @@ const DIMENSIONS = [
     lowLabel: 'Live for today',
     highLabel: 'Plan for tomorrow',
     spectrum: [
-      {marker: 'Far left', text: '\u2022 Traditions are sacred, celebrate the same way every year\n\u2022 Spend money now rather than save for a distant future\n\u2022 Clear moral rights and wrongs'},
-      {marker: 'Leaning left', text: '\u2022 Follow traditions faithfully\n\u2022 Rather enjoy this weekend than worry about retirement\n\u2022 Quick results feel more satisfying'},
-      {marker: 'Centre', text: '\u2022 Respect traditions but update ones that don\u2019t make sense\n\u2022 Balance saving for the future with enjoying today\n\u2022 Pragmatic but not ruthless about it'},
-      {marker: 'Leaning right', text: '\u2022 Saver and planner by nature\n\u2022 Delay gratification for a better outcome later\n\u2022 Traditions shouldn\u2019t hold back progress'},
-      {marker: 'Far right', text: '\u2022 Skip a tradition if something productive came up\n\u2022 What works > what\u2019s always been done\n\u2022 Plan years ahead, invest in the long game'}
+      {marker: 'Far left', text: '\u2022 Traditions are sacred \u2014 never change them\n\u2022 Why save when you could enjoy it now?\n\u2022 There are absolute rights and wrongs'},
+      {marker: 'Leaning left', text: '\u2022 Honour the old ways\n\u2022 Enjoy today, tomorrow sorts itself out'},
+      {marker: 'Centre', text: '\u2022 Respect traditions but update what doesn\u2019t work'},
+      {marker: 'Leaning right', text: '\u2022 Invest now, enjoy later\n\u2022 Adapt traditions if they hold you back'},
+      {marker: 'Far right', text: '\u2022 Skip Christmas dinner for a business opportunity\n\u2022 Tradition is just peer pressure from dead people\n\u2022 Everything is a long-term investment'}
     ],
     gapText: {
       higher: "You're more future-oriented than this culture. People here value traditions, quick results, and established ways. Your long-term planning mindset may clash with a preference for immediate outcomes.",
@@ -1361,11 +1361,11 @@ const DIMENSIONS = [
     lowLabel: 'Restrained',
     highLabel: 'Indulgent',
     spectrum: [
-      {marker: 'Far left', text: '\u2022 Feel guilty buying yourself something nice\n\u2022 Duty and responsibility before pleasure\n\u2022 Save money and stay in \u2014 that\u2019s responsible'},
-      {marker: 'Leaning left', text: '\u2022 Suggest a cheaper alternative or stay home\n\u2022 Fun is fine sometimes, discipline matters more\n\u2022 People should control their impulses'},
-      {marker: 'Centre', text: '\u2022 Treat yourself occasionally, keep things in check\n\u2022 Enjoy going out but wouldn\u2019t blow your budget\n\u2022 Balance between fun and responsibility'},
-      {marker: 'Leaning right', text: '\u2022 Probably go \u2014 life\u2019s too short to always say no\n\u2022 Experiences and friendships over strict budgeting\n\u2022 Figure the money out later'},
-      {marker: 'Far right', text: '\u2022 Absolutely go \u2014 and order dessert\n\u2022 Life is for living, worry about the bill tomorrow\n\u2022 Being with friends is what matters most'}
+      {marker: 'Far left', text: '\u2022 Guilt follows every small pleasure\n\u2022 Duty before happiness \u2014 always\n\u2022 Wanting things for yourself feels selfish'},
+      {marker: 'Leaning left', text: '\u2022 Discipline over indulgence\n\u2022 Stay in and save \u2014 that\u2019s the right call'},
+      {marker: 'Centre', text: '\u2022 Treat yourself sometimes, within reason'},
+      {marker: 'Leaning right', text: '\u2022 Say yes to fun \u2014 figure the rest out later\n\u2022 Experiences over savings'},
+      {marker: 'Far right', text: '\u2022 Life is a party and you\u2019re the guest of honour\n\u2022 Buy it, eat it, do it \u2014 worry never\n\u2022 Happiness is the whole point of being alive'}
     ],
     gapText: {
       higher: "You're more fun-loving than this culture. People here may seem serious or reserved. Public displays of enjoyment and spontaneity might be frowned upon. Duty and discipline are prioritized.",
