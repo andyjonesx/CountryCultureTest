@@ -772,6 +772,39 @@ h3 { font-size: 1.3rem; color: var(--color-secondary); }
 .saved-item .si-date { font-size: 0.72rem; color: var(--color-text-muted); }
 .saved-item .si-arrow { color: var(--color-border); }
 
+.saved-item .si-similarity {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #7C6FD0;
+  background: #F0EEFB;
+  padding: 2px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.si-delete {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.si-delete:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
 .saved-header {
   display: flex;
   justify-content: space-between;
@@ -1007,6 +1040,36 @@ h3 { font-size: 1.3rem; color: var(--color-secondary); }
   font-size: 0.82rem;
   margin-top: 8px;
 }
+
+/* Past entry selector on welcome screen */
+.past-entries-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.past-entries-select {
+  padding: 10px 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  width: 320px;
+  max-width: 100%;
+  text-align: center;
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.past-entries-select:focus { outline: none; border-color: var(--color-primary); }
+
+.past-entries-label {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  display: block;
+}
 </style>
 </head>
 <body>
@@ -1045,6 +1108,12 @@ h3 { font-size: 1.3rem; color: var(--color-secondary); }
         <div class="feature-title">Travel Tips</div>
         <div class="feature-desc">Get practical advice for visiting any country.</div>
       </div>
+    </div>
+    <div class="past-entries-section" id="past-entries-section" style="display:none;">
+      <span class="past-entries-label">Or continue from a previous entry:</span>
+      <select class="past-entries-select" id="past-entries-select">
+        <option value="">Start fresh...</option>
+      </select>
     </div>
     <div class="name-input-section">
       <input type="text" id="name-input" class="name-input" placeholder="Enter your name to begin..." maxlength="30" autocomplete="off">
@@ -1430,11 +1499,12 @@ function loadSavedResults() {
   } catch { return []; }
 }
 
-function saveResult(name, scores, topMatch) {
+function saveResult(name, scores, weights, topMatch) {
   const saved = loadSavedResults();
   saved.push({
     name: name || 'Anonymous',
     scores: { ...scores },
+    weights: { ...weights },
     topMatch: topMatch,
     timestamp: Date.now()
   });
@@ -1443,6 +1513,79 @@ function saveResult(name, scores, topMatch) {
 
 function clearSavedResults() {
   localStorage.removeItem(STORAGE_KEY);
+}
+
+function removeSavedResult(index) {
+  const saved = loadSavedResults();
+  if (index < 0 || index >= saved.length) return;
+  saved.splice(index, 1);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+}
+
+function getSavedWeights(entry) {
+  const defaults = { pdi: 1, idv: 1, mas: 1, uai: 1, lto: 1, ivr: 1 };
+  if (!entry.weights) return defaults;
+  return { ...defaults, ...entry.weights };
+}
+
+function populateWelcomeEntries() {
+  const section = document.getElementById('past-entries-section');
+  const select = document.getElementById('past-entries-select');
+  const saved = loadSavedResults();
+
+  if (saved.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = '';
+  select.innerHTML = '<option value="">Start fresh...</option>';
+  saved.forEach((entry, i) => {
+    const date = new Date(entry.timestamp).toLocaleDateString();
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${entry.name} \u2014 ${entry.topMatch.name} (${entry.topMatch.matchPct}%) \u2014 ${date}`;
+    select.appendChild(opt);
+  });
+}
+
+function loadSavedEntry(index) {
+  const saved = loadSavedResults();
+  const entry = saved[index];
+  if (!entry) return;
+
+  const keys = ['pdi', 'idv', 'mas', 'uai', 'lto', 'ivr'];
+  const weights = getSavedWeights(entry);
+
+  // Update state
+  state.playerName = entry.name;
+  keys.forEach(k => {
+    state.scores[k] = entry.scores[k];
+    state.weights[k] = weights[k];
+  });
+
+  // Update name input
+  document.getElementById('name-input').value = entry.name;
+
+  // Update sliders
+  document.querySelectorAll('.custom-slider').forEach(slider => {
+    const dim = slider.dataset.dim;
+    const val = state.scores[dim];
+    slider.value = val;
+    slider.style.setProperty('--val', val + '%');
+  });
+
+  // Update importance toggles
+  document.querySelectorAll('.importance-btns').forEach(btnGroup => {
+    const dim = btnGroup.dataset.dim;
+    const w = state.weights[dim];
+    btnGroup.querySelectorAll('.imp-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (parseFloat(btn.dataset.weight) === w) {
+        btn.classList.add('active');
+      }
+    });
+  });
 }
 
 // ============================================================
@@ -1545,6 +1688,11 @@ function navigateTo(target) {
   state.currentScreen = target;
   updateProgress();
 
+  if (target === 0) {
+    populateWelcomeEntries();
+    const pastSelect = document.getElementById('past-entries-select');
+    if (pastSelect) pastSelect.value = '';
+  }
   if (target === 7) targetEl.scrollTop = 0;
 }
 
@@ -1595,6 +1743,17 @@ function computeResults() {
   state.results = results;
 }
 
+function calculatePersonSimilarity(scoresA, scoresB) {
+  const keys = ['pdi', 'idv', 'mas', 'uai', 'lto', 'ivr'];
+  let sumSq = 0;
+  keys.forEach(k => {
+    sumSq += Math.pow((scoresA[k] || 50) - (scoresB[k] || 50), 2);
+  });
+  const distance = Math.sqrt(sumSq);
+  const maxDist = Math.sqrt(keys.length) * 100;
+  return Math.max(0, Math.round((1 - distance / maxDist) * 100));
+}
+
 // ============================================================
 // MATCH EXPLANATION
 // ============================================================
@@ -1639,7 +1798,7 @@ function renderResults() {
   const shareCode = encodeScore(state.playerName, state.scores);
 
   // Save to localStorage
-  saveResult(state.playerName, state.scores, { code: top.code, name: top.name, matchPct: top.matchPct });
+  saveResult(state.playerName, state.scores, state.weights, { code: top.code, name: top.name, matchPct: top.matchPct });
 
   content.innerHTML = `
     <div class="loading-overlay" id="loading">
@@ -1702,14 +1861,18 @@ function renderResults() {
           <button class="btn-small" id="btn-clear-saved">Clear All</button>
         </div>
         <div class="saved-list" id="saved-list">
-          ${otherSaved.map((s, i) => `
+          ${otherSaved.map((s, i) => {
+            const simPct = calculatePersonSimilarity(state.scores, s.scores);
+            return `
             <div class="saved-item" data-idx="${i}">
               <span class="si-name">${s.name}</span>
+              <span class="si-similarity" title="Similarity to you">${simPct}% similar</span>
               <span class="si-match">${getFlag(s.topMatch.code)} ${s.topMatch.name} (${s.topMatch.matchPct}%)</span>
               <span class="si-date">${new Date(s.timestamp).toLocaleDateString()}</span>
+              <button class="si-delete" data-idx="${i}" title="Remove this entry">&times;</button>
               <span class="si-arrow">&#8250;</span>
-            </div>
-          `).join('')}
+            </div>`;
+          }).join('')}
         </div>
       </div>`;
     }
@@ -1818,10 +1981,39 @@ function bindResultEvents() {
     });
   }
 
-  // Saved item clicks
+  // Saved item clicks (delete + compare)
   const savedList = document.getElementById('saved-list');
   if (savedList) {
     savedList.addEventListener('click', (e) => {
+      // Handle delete button click
+      const deleteBtn = e.target.closest('.si-delete');
+      if (deleteBtn) {
+        e.stopPropagation();
+        const idx = parseInt(deleteBtn.dataset.idx);
+        removeSavedResult(idx);
+        const saved = loadSavedResults();
+        const otherSaved = saved.filter((s, i) => i < saved.length - 1);
+        if (otherSaved.length === 0) {
+          const savedSection = savedList.closest('.result-section');
+          if (savedSection) savedSection.remove();
+        } else {
+          savedList.innerHTML = otherSaved.map((s, i) => {
+            const simPct = calculatePersonSimilarity(state.scores, s.scores);
+            return `
+            <div class="saved-item" data-idx="${i}">
+              <span class="si-name">${s.name}</span>
+              <span class="si-similarity" title="Similarity to you">${simPct}% similar</span>
+              <span class="si-match">${getFlag(s.topMatch.code)} ${s.topMatch.name} (${s.topMatch.matchPct}%)</span>
+              <span class="si-date">${new Date(s.timestamp).toLocaleDateString()}</span>
+              <button class="si-delete" data-idx="${i}" title="Remove this entry">&times;</button>
+              <span class="si-arrow">&#8250;</span>
+            </div>`;
+          }).join('');
+        }
+        return;
+      }
+
+      // Handle saved-item click (open compare modal)
       const item = e.target.closest('.saved-item');
       if (!item) return;
       const idx = parseInt(item.dataset.idx);
@@ -2026,11 +2218,12 @@ function openPersonCompareModal(personName, personScores) {
   const body = document.getElementById('modal-body');
   const keys = ['pdi', 'idv', 'mas', 'uai', 'lto', 'ivr'];
   const youName = state.playerName || 'You';
+  const similarity = calculatePersonSimilarity(state.scores, personScores);
 
   header.innerHTML = `
     <div class="modal-info" style="flex:1;">
       <h2>${youName} vs ${personName}</h2>
-      <span class="modal-pct">Personal comparison</span>
+      <span class="modal-pct">${similarity}% similar</span>
     </div>
     <button class="modal-close" id="modal-close-btn">&times;</button>
   `;
@@ -2121,6 +2314,30 @@ document.getElementById('name-input').addEventListener('input', () => {
   document.getElementById('name-error').textContent = '';
 });
 
+// Past entries dropdown
+document.getElementById('past-entries-select').addEventListener('change', (e) => {
+  const idx = e.target.value;
+  if (idx === '') {
+    // Reset to fresh state
+    state.playerName = '';
+    document.getElementById('name-input').value = '';
+    const keys = ['pdi', 'idv', 'mas', 'uai', 'lto', 'ivr'];
+    keys.forEach(k => { state.scores[k] = 50; state.weights[k] = 1; });
+    document.querySelectorAll('.custom-slider').forEach(slider => {
+      slider.value = 50;
+      slider.style.setProperty('--val', '50%');
+    });
+    document.querySelectorAll('.importance-btns').forEach(btnGroup => {
+      btnGroup.querySelectorAll('.imp-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (parseFloat(btn.dataset.weight) === 1) btn.classList.add('active');
+      });
+    });
+    return;
+  }
+  loadSavedEntry(parseInt(idx));
+});
+
 document.addEventListener('click', (e) => {
   if (e.target.classList.contains('btn-next')) {
     if (state.currentScreen >= 1 && state.currentScreen <= 5) {
@@ -2160,6 +2377,9 @@ document.addEventListener('click', (e) => {
 
 // Close modal on Escape
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+// Populate past entries on initial load
+populateWelcomeEntries();
 </script>
 </body>
 </html>
